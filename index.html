@@ -1,0 +1,2289 @@
+<!doctype html>
+<html lang="pt-BR">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémon Monopoly Ultra</title>
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #FF1C1C 0%, #FFD700 50%, #1E90FF 100%);
+      color: #fff;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    .app-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, rgba(255,28,28,0.95) 0%, rgba(200,0,0,0.95) 100%);
+      padding: 12px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 4px solid #FFD700;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #FFD700 0%, #FFF 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    /* SECRET ADMIN BUTTON */
+    .secret-admin-btn {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      width: 40px;
+      height: 40px;
+      background: rgba(0,0,0,0.3);
+      border: 2px solid rgba(255,215,0,0.3);
+      border-radius: 8px;
+      cursor: pointer;
+      opacity: 0.15;
+      transition: all 0.3s;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .secret-admin-btn:hover {
+      opacity: 1;
+      background: rgba(0,0,0,0.7);
+      border-color: #FFD700;
+      transform: scale(1.1);
+      box-shadow: 0 5px 15px rgba(255,215,0,0.5);
+    }
+
+    .user-info {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .stat-box {
+      background: rgba(0,0,0,0.7);
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 2px solid #FFD700;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+    }
+
+    /* LOGIN SCREEN */
+    .login-screen {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .login-box {
+      background: linear-gradient(135deg, rgba(255,28,28,0.95) 0%, rgba(30,144,255,0.95) 100%);
+      padding: 40px;
+      border-radius: 20px;
+      border: 4px solid #FFD700;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .login-box h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 28px;
+      color: #FFF;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #FFD700;
+      font-weight: 600;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 3px solid #FFD700;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      font-size: 16px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Poppins', sans-serif;
+      margin-top: 10px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+      color: #000;
+      border: 3px solid #FF1C1C;
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #1E90FF 0%, #00BFFF 100%);
+      color: #FFF;
+      border: 3px solid #FFD700;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(255,215,0,0.8);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-shop {
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      color: #000;
+      border: 3px solid #FFD700;
+    }
+
+    /* GAME SCREEN */
+    .game-screen {
+      flex: 1;
+      display: flex;
+      gap: 15px;
+      padding: 15px;
+      overflow: hidden;
+    }
+
+    .board-container {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow: hidden;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .board-info {
+      background: linear-gradient(135deg, rgba(255,215,0,0.95) 0%, rgba(255,165,0,0.95) 100%);
+      border: 3px solid #FF1C1C;
+      border-radius: 12px;
+      padding: 10px 20px;
+      color: #000;
+      font-weight: 900;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+      animation: pulse-glow 2s infinite;
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 5px 20px rgba(255,215,0,0.5); }
+      50% { box-shadow: 0 5px 30px rgba(255,215,0,0.9); }
+    }
+
+    .board {
+      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
+      border: 5px solid #FFD700;
+      border-radius: 20px;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 6px;
+      width: 475px;
+      height: 475px;
+      margin: 0 auto;
+      box-shadow: 0 0 50px rgba(255,215,0,0.5), inset 0 0 50px rgba(255,215,0,0.1);
+    }
+
+    .space {
+      background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(230,230,250,0.9) 100%);
+      border: 2px solid #FFD700;
+      border-radius: 6px;
+      padding: 4px;
+      text-align: center;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.3s;
+      min-height: 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #000;
+    }
+
+    .space.level-2 {
+      background: linear-gradient(135deg, rgba(255,215,0,0.9) 0%, rgba(255,165,0,0.9) 100%);
+      box-shadow: 0 0 15px rgba(255,215,0,0.8);
+    }
+
+    .space.level-3 {
+      background: linear-gradient(135deg, rgba(138,43,226,0.9) 0%, rgba(75,0,130,0.9) 100%);
+      color: #FFF;
+      box-shadow: 0 0 15px rgba(138,43,226,0.8);
+    }
+
+    .space.level-4 {
+      background: linear-gradient(135deg, rgba(255,0,0,0.9) 0%, rgba(139,0,0,0.9) 100%);
+      color: #FFF;
+      box-shadow: 0 0 20px rgba(255,0,0,0.8);
+      animation: legendary-glow 1.5s infinite;
+    }
+
+    @keyframes legendary-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(255,0,0,0.8); }
+      50% { box-shadow: 0 0 30px rgba(255,0,0,1); }
+    }
+
+    .space.card-space {
+      background: linear-gradient(135deg, #FF1C1C 0%, #FF6B6B 100%);
+      border: 2px solid #FFD700;
+      font-size: 18px;
+      box-shadow: 0 0 20px rgba(255,28,28,0.8);
+    }
+
+    .space.special-space {
+      background: linear-gradient(135deg, #9370DB 0%, #BA55D3 100%);
+      border: 2px solid #FFD700;
+      font-size: 16px;
+      color: #FFF;
+      box-shadow: 0 0 20px rgba(147,112,219,0.8);
+    }
+
+    .space:hover {
+      transform: scale(1.08);
+      box-shadow: 0 8px 25px rgba(255,215,0,0.8);
+      z-index: 10;
+    }
+
+    .space.property {
+      border-top: 8px solid;
+    }
+
+    .space.owned {
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      box-shadow: 0 0 15px rgba(67,233,123,0.6);
+    }
+
+    .space-name {
+      font-size: 7px;
+      font-weight: 700;
+      margin-bottom: 2px;
+      text-shadow: 1px 1px 2px rgba(255,255,255,0.5);
+    }
+
+    .space-price {
+      font-size: 6px;
+      color: #FF1C1C;
+      font-weight: 700;
+    }
+
+    .player-token {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1px solid #FFD700;
+      font-size: 8px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #FF1C1C;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+
+    .controls-panel {
+      background: linear-gradient(135deg, rgba(255,28,28,0.95) 0%, rgba(30,144,255,0.95) 100%);
+      border: 4px solid #FFD700;
+      border-radius: 15px;
+      padding: 12px;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      width: 475px;
+      margin: 0 auto;
+      box-shadow: 0 5px 30px rgba(0,0,0,0.5);
+    }
+
+    .dice {
+      width: 50px;
+      height: 50px;
+      background: white;
+      color: #FF1C1C;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: 900;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      border: 3px solid #FFD700;
+    }
+
+    .sidebar {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow-y: auto;
+    }
+
+    .card-panel {
+      background: linear-gradient(135deg, rgba(255,28,28,0.95) 0%, rgba(255,107,107,0.95) 100%);
+      border: 4px solid #FFD700;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    .card-panel h3 {
+      color: #FFD700;
+      margin-bottom: 12px;
+      text-align: center;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      font-size: 16px;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #9370DB 0%, #BA55D3 100%);
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      border: 2px solid #FFD700;
+    }
+
+    .card-title {
+      font-weight: 700;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+
+    .card-desc {
+      font-size: 11px;
+      opacity: 0.9;
+    }
+
+    .players-panel {
+      background: linear-gradient(135deg, rgba(30,144,255,0.95) 0%, rgba(0,191,255,0.95) 100%);
+      border: 4px solid #FFD700;
+      border-radius: 15px;
+      padding: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    .players-panel h3 {
+      color: #FFD700;
+      margin-bottom: 12px;
+      text-align: center;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      font-size: 16px;
+    }
+
+    .player-item {
+      background: rgba(0,0,0,0.6);
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      border-left: 4px solid #FFD700;
+    }
+
+    .player-name {
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .player-stats {
+      font-size: 11px;
+      opacity: 0.8;
+      display: flex;
+      gap: 10px;
+    }
+
+    /* ADMIN PANEL */
+    .admin-panel {
+      background: linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(50,50,50,0.95) 100%);
+      border: 4px solid #FFD700;
+      border-radius: 15px;
+      padding: 15px;
+      max-height: 350px;
+      overflow-y: auto;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    .admin-panel h3 {
+      color: #FFD700;
+      margin-bottom: 12px;
+      text-align: center;
+      font-size: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .admin-lock-btn {
+      background: #ff6b6b;
+      border: 2px solid #FFD700;
+      color: white;
+      padding: 4px 12px;
+      border-radius: 5px;
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.3s;
+    }
+
+    .admin-lock-btn:hover {
+      background: #ff5252;
+      transform: scale(1.05);
+    }
+
+    .admin-controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .admin-player {
+      background: rgba(0,0,0,0.6);
+      padding: 8px;
+      border-radius: 8px;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .admin-actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    .btn-small {
+      padding: 4px 8px;
+      font-size: 11px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-danger {
+      background: #ff6b6b;
+      color: white;
+    }
+
+    .btn-success {
+      background: #43e97b;
+      color: black;
+    }
+
+    /* ADMIN PASSWORD MODAL */
+    .admin-password-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.95);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 5000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .admin-password-box {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      border: 5px solid #FFD700;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 450px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+      animation: scaleIn 0.3s ease;
+    }
+
+    .admin-password-box h2 {
+      text-align: center;
+      color: #FFD700;
+      margin-bottom: 25px;
+      font-size: 24px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .message {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight: 700;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
+      border: 3px solid #FFD700;
+      font-size: 14px;
+    }
+
+    .message.success {
+      background: #43e97b;
+      color: black;
+    }
+
+    .message.error {
+      background: #ff6b6b;
+      color: white;
+    }
+
+    .message.info {
+      background: #4facfe;
+      color: black;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes scaleIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .loading {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: #fff;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* MISSION MODAL */
+    .mission-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .mission-card {
+      background: linear-gradient(135deg, #FF1C1C 0%, #1E90FF 100%);
+      border: 5px solid #FFD700;
+      border-radius: 20px;
+      padding: 35px;
+      max-width: 600px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+      text-align: center;
+      animation: scaleIn 0.3s ease;
+    }
+
+    .card-back {
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+      border: 5px solid #FF1C1C;
+      border-radius: 15px;
+      padding: 55px;
+      margin-bottom: 18px;
+      font-size: 68px;
+      box-shadow: inset 0 0 30px rgba(255,255,255,0.3);
+    }
+
+    .mission-question {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 25px;
+      color: #FFF;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .mission-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .option-btn {
+      padding: 18px;
+      border: 3px solid #FFD700;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.9);
+      color: #000;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .option-btn:hover {
+      transform: scale(1.05);
+      background: #FFD700;
+      box-shadow: 0 5px 20px rgba(255,215,0,0.8);
+    }
+
+    .option-btn.correct {
+      background: #43e97b;
+      border-color: #00ff88;
+      animation: pulse 0.5s ease;
+    }
+
+    .option-btn.incorrect {
+      background: #ff6b6b;
+      border-color: #ff0000;
+      animation: shake 0.5s ease;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+    .mission-stars {
+      font-size: 18px;
+      color: #FFD700;
+      font-weight: 700;
+      margin-top: 12px;
+    }
+
+    .mission-timer {
+      font-size: 48px;
+      font-weight: 900;
+      color: #FFD700;
+      margin-bottom: 20px;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+      animation: timerPulse 1s infinite;
+    }
+
+    .mission-timer.danger {
+      color: #FF1C1C;
+      animation: timerDanger 0.5s infinite;
+    }
+
+    @keyframes timerPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes timerDanger {
+      0%, 100% { transform: scale(1); color: #FF1C1C; }
+      50% { transform: scale(1.15); color: #FF6B6B; }
+    }
+
+    /* SHOP MODAL */
+    .shop-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.95);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 3000;
+      animation: fadeIn 0.3s ease;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .shop-container {
+      background: linear-gradient(135deg, #FF1C1C 0%, #1E90FF 100%);
+      border: 5px solid #FFD700;
+      border-radius: 20px;
+      padding: 30px;
+      max-width: 900px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+      animation: scaleIn 0.3s ease;
+      max-height: 90%;
+      overflow-y: auto;
+    }
+
+    .shop-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .shop-title {
+      font-size: 32px;
+      font-weight: 900;
+      color: #FFD700;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+      margin-bottom: 10px;
+    }
+
+    .shop-balance {
+      font-size: 24px;
+      font-weight: 700;
+      color: #FFF;
+      background: rgba(0,0,0,0.5);
+      padding: 10px 20px;
+      border-radius: 10px;
+      display: inline-block;
+      border: 2px solid #FFD700;
+    }
+
+    .shop-packs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .pack-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,240,255,0.95) 100%);
+      border: 4px solid #FFD700;
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      transition: all 0.3s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pack-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,215,0,0.3), transparent);
+      transform: rotate(45deg);
+      animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+      0%, 100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    .pack-card:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 10px 40px rgba(255,215,0,0.8);
+      border-color: #FF1C1C;
+    }
+
+    .pack-icon {
+      font-size: 60px;
+      margin-bottom: 10px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .pack-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: #FF1C1C;
+      margin-bottom: 5px;
+    }
+
+    .pack-price {
+      font-size: 18px;
+      font-weight: 700;
+      color: #FFD700;
+      margin-bottom: 10px;
+    }
+
+    .pack-desc {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 15px;
+    }
+
+    .pack-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+      color: #000;
+      border: 3px solid #FF1C1C;
+    }
+
+    .pack-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 20px rgba(255,215,0,0.8);
+    }
+
+    .pack-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .close-shop-btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #666 0%, #999 100%);
+      color: #FFF;
+      border: 3px solid #FFD700;
+      margin-top: 10px;
+    }
+
+    .close-shop-btn:hover {
+      transform: scale(1.02);
+      background: linear-gradient(135deg, #777 0%, #aaa 100%);
+    }
+
+    /* PACK OPENING ANIMATION */
+    .pack-opening {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.98);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 4000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .pack-animation {
+      font-size: 150px;
+      animation: packOpen 1.5s ease;
+      margin-bottom: 30px;
+    }
+
+    @keyframes packOpen {
+      0% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.5) rotate(180deg); }
+      100% { transform: scale(1) rotate(360deg); }
+    }
+
+    .cards-reveal {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      width: 100%;
+      padding: 20px;
+    }
+
+    .revealed-card {
+      background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+      border: 4px solid #FF1C1C;
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      animation: cardReveal 0.5s ease forwards;
+      opacity: 0;
+      transform: rotateY(180deg);
+    }
+
+    .revealed-card:nth-child(1) { animation-delay: 0.2s; }
+    .revealed-card:nth-child(2) { animation-delay: 0.4s; }
+    .revealed-card:nth-child(3) { animation-delay: 0.6s; }
+    .revealed-card:nth-child(4) { animation-delay: 0.8s; }
+    .revealed-card:nth-child(5) { animation-delay: 1s; }
+
+    @keyframes cardReveal {
+      to {
+        opacity: 1;
+        transform: rotateY(0deg);
+      }
+    }
+
+    .revealed-card-icon {
+      font-size: 50px;
+      margin-bottom: 10px;
+    }
+
+    .revealed-card-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 5px;
+    }
+
+    .revealed-card-type {
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .revealed-card-stars {
+      font-size: 20px;
+      color: #FF1C1C;
+      font-weight: 700;
+    }
+
+    .revealed-card.rare {
+      background: linear-gradient(135deg, #9370DB 0%, #BA55D3 100%);
+      box-shadow: 0 0 30px rgba(147,112,219,0.8);
+      animation: cardRevealRare 0.5s ease forwards;
+    }
+
+    @keyframes cardRevealRare {
+      0% {
+        opacity: 0;
+        transform: rotateY(180deg) scale(0.8);
+      }
+      100% {
+        opacity: 1;
+        transform: rotateY(0deg) scale(1.1);
+      }
+    }
+
+    .continue-btn {
+      margin-top: 30px;
+      padding: 15px 50px;
+      border: none;
+      border-radius: 10px;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      color: #000;
+      border: 3px solid #FFD700;
+    }
+
+    .continue-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 5px 30px rgba(67,233,123,0.8);
+    }
+
+    /* Scrollbar */
+    .sidebar::-webkit-scrollbar,
+    .admin-panel::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .sidebar::-webkit-scrollbar-track,
+    .admin-panel::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb,
+    .admin-panel::-webkit-scrollbar-thumb {
+      background: #FFD700;
+      border-radius: 10px;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="app-container"><!-- HEADER -->
+   <header class="header"><!-- SECRET ADMIN BUTTON --> <button class="secret-admin-btn" onclick="showAdminPasswordModal()" title="Admin">���️</button>
+    <div class="logo"><span>⚡</span> <span id="game-title">POKÉMON MONOPOLY ULTRA</span>
+    </div><!-- BANNER LINK --> <a href="https://mypcards.com/" target="_blank" rel="noopener noreferrer" style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); border: 3px solid #FF1C1C; border-radius: 10px; padding: 8px 16px; color: #000; font-weight: 700; font-size: 13px; text-decoration: none; display: flex; align-items: center; gap: 6px; transition: all 0.3s; box-shadow: 0 3px 10px rgba(0,0,0,0.3);" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 5px 20px rgba(255,215,0,0.8)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 3px 10px rgba(0,0,0,0.3)'"> 🎴 MY PCARDS </a>
+    <div class="user-info hidden" id="user-info">
+     <div class="stat-box"><span>⭐</span> <span id="user-stars">0</span>
+     </div>
+     <div class="stat-box"><span>🎮</span> <span><span id="user-plays">0</span>/3</span>
+     </div>
+     <div class="stat-box"><span>🔄</span> <span id="user-laps">0</span>
+     </div>
+     <div class="stat-box"><span>💰</span> <span id="user-money">₽0</span>
+     </div><button class="btn btn-small btn-danger" onclick="logout()" style="padding: 6px 12px;">Sair</button>
+    </div>
+   </header><!-- LOGIN SCREEN -->
+   <div class="login-screen" id="login-screen">
+    <div class="login-box">
+     <h2>⚡ ENTRAR NO JOGO ⚡</h2>
+     <div class="form-group"><label for="login-name">Nome do Treinador:</label> <input type="text" id="login-name" placeholder="Digite seu nome">
+     </div>
+     <div class="form-group"><label for="login-password">Senha:</label> <input type="password" id="login-password" placeholder="Digite sua senha">
+     </div><button class="btn btn-primary" id="login-btn" onclick="login()"> 🎮 COMEÇAR AVENTURA </button> <button class="btn btn-secondary" onclick="showRegister()"> ➕ CRIAR TREINADOR </button>
+    </div>
+   </div><!-- REGISTER SCREEN -->
+   <div class="login-screen hidden" id="register-screen">
+    <div class="login-box">
+     <h2>➕ CRIAR TREINADOR</h2>
+     <div class="form-group"><label for="register-name">Nome do Treinador:</label> <input type="text" id="register-name" placeholder="Digite seu nome">
+     </div>
+     <div class="form-group"><label for="register-password">Senha:</label> <input type="password" id="register-password" placeholder="Crie uma senha">
+     </div>
+     <div class="form-group"><label for="register-password-confirm">Confirmar Senha:</label> <input type="password" id="register-password-confirm" placeholder="Confirme sua senha">
+     </div><button class="btn btn-primary" id="register-btn" onclick="register()"> ��� CRIAR CONTA </button> <button class="btn btn-secondary" onclick="showLogin()"> ⬅️ VOLTAR </button>
+    </div>
+   </div><!-- GAME SCREEN -->
+   <div class="game-screen hidden" id="game-screen">
+    <div class="board-container">
+     <div class="board-info" id="board-info">
+      🏆 NÍVEL 1 - TABULEIRO BÁSICO 🏆
+     </div>
+     <div class="board" id="board"><!-- Spaces will be generated by JS -->
+     </div>
+     <div class="controls-panel">
+      <div class="dice" id="dice1">
+       ?
+      </div>
+      <div class="dice" id="dice2">
+       ?
+      </div><button class="btn btn-primary" id="roll-btn" onclick="rollDice()" style="width: auto; padding: 12px 24px; font-size: 16px;"> ⚡ JOGAR </button>
+      <div class="stat-box" style="font-size: 13px;"><span>Jogadas:</span> <span id="plays-remaining">0/3</span>
+      </div><button class="btn btn-success" style="width: auto; padding: 12px 24px; font-size: 16px; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: #000; border: 3px solid #FFD700;" onclick="openShop()"> 🛒 LOJA </button>
+     </div>
+    </div>
+    <div class="sidebar"><!-- CARD PANEL -->
+     <div class="card-panel">
+      <h3>🎴 CARTA POKÉMON</h3>
+      <div id="current-card" style="text-align: center; opacity: 0.8; font-size: 12px;">
+       Jogue os dados para pegar uma carta!
+      </div>
+     </div><!-- PLAYERS PANEL -->
+     <div class="players-panel">
+      <h3>👥 TREINADORES ONLINE</h3>
+      <div id="players-list"><!-- Players will be listed here -->
+      </div>
+     </div><!-- ADMIN PANEL -->
+     <div class="admin-panel hidden" id="admin-panel">
+      <h3><span>👁️ PAINEL ADMINISTRADOR</span> <button class="admin-lock-btn" onclick="lockAdminPanel()">🔒 BLOQUEAR</button></h3>
+      <div class="admin-controls"><button class="btn-small btn-success" onclick="giveStarsAll()">⭐ +10 p/ Todos</button> <button class="btn-small btn-danger" onclick="resetAllPlays()">🔄 Reset Jogadas</button>
+      </div>
+      <div id="admin-players-list"><!-- Admin player list -->
+      </div>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    // CONFIG
+    const defaultConfig = {
+      game_title: "POKÉMON MONOPOLY ULTRA",
+      admin_password: "424398"
+    };
+
+    // GLOBAL STATE
+    let currentUser = null;
+    let allPlayers = [];
+    let isAdmin = false;
+    let adminUnlocked = false;
+    let shopLoginMode = false;
+
+    // LOCALSTORAGE KEYS
+    const STORAGE_KEY_USER = 'pokemon_monopoly_user_id';
+
+    // SHOP PACKS
+    const shopPacks = [
+      { id: 1, name: "Pacote Iniciante", icon: "📦", price: 50, cards: 3, desc: "3 cartas comuns", rarity: "common" },
+      { id: 2, name: "Pacote Aventureiro", icon: "🎁", price: 150, cards: 5, desc: "5 cartas com chance de rara", rarity: "uncommon" },
+      { id: 3, name: "Pacote Mestre", icon: "🎀", price: 300, cards: 5, desc: "5 cartas com rara garantida", rarity: "rare" },
+      { id: 4, name: "Pacote Lendário", icon: "💎", price: 500, cards: 5, desc: "5 cartas lendárias", rarity: "legendary" },
+      { id: 5, name: "Mega Pacote", icon: "🌟", price: 1000, cards: 10, desc: "10 cartas múltiplas raras", rarity: "mega" }
+    ];
+
+    // POKEMON CARDS
+    const pokemonCards = {
+      common: [
+        { name: "Rattata", type: "Normal", icon: "🐭", stars: 2 },
+        { name: "Pidgey", type: "Voador", icon: "🐦", stars: 2 },
+        { name: "Magikarp", type: "Água", icon: "��", stars: 2 }
+      ],
+      uncommon: [
+        { name: "Pikachu", type: "Elétrico", icon: "⚡", stars: 5 },
+        { name: "Squirtle", type: "Água", icon: "🐢", stars: 5 },
+        { name: "Charmander", type: "Fogo", icon: "🔥", stars: 5 }
+      ],
+      rare: [
+        { name: "Charizard", type: "Fogo/Voador", icon: "🐉", stars: 10 },
+        { name: "Blastoise", type: "Água", icon: "🐢", stars: 10 },
+        { name: "Dragonite", type: "Dragão/Voador", icon: "🐉", stars: 12 }
+      ],
+      legendary: [
+        { name: "Mewtwo", type: "Psíquico", icon: "👁️", stars: 20 },
+        { name: "Mew", type: "Psíquico", icon: "💖", stars: 20 },
+        { name: "Rayquaza", type: "Dragão/Voador", icon: "🐉", stars: 20 }
+      ]
+    };
+
+    // BOARD SPACES
+    const boardSpaces = [
+      { name: "CIDADE INICIAL", type: "start", color: "#43e97b", price: 0, icon: "🏠" },
+      { name: "Pikachu", type: "property", color: "#FFD700", price: 60 },
+      { name: "⚡", type: "card", color: "#ffd700", price: 0, icon: "⚡" },
+      { name: "Raichu", type: "property", color: "#FFD700", price: 80 },
+      { name: "Charmander", type: "property", color: "#FF4500", price: 100 },
+      { name: "🏟�����", type: "station", color: "#FF1C1C", price: 200 },
+      { name: "Charmeleon", type: "property", color: "#FF4500", price: 120 },
+      { name: "🎴", type: "card", color: "#ffd700", price: 0, icon: "🎴" },
+      { name: "Charizard", type: "property", color: "#FF4500", price: 140 },
+      { name: "ROCKET", type: "jail", color: "#ff6b6b", price: 0, icon: "🚁" },
+      { name: "Squirtle", type: "property", color: "#00BFFF", price: 140 },
+      { name: "💧", type: "card", color: "#ffd700", price: 0, icon: "💧" },
+      { name: "Wartortle", type: "property", color: "#00BFFF", price: 160 },
+      { name: "Blastoise", type: "property", color: "#00BFFF", price: 180 },
+      { name: "🏟️", type: "station", color: "#1E90FF", price: 200 },
+      { name: "Bulbasaur", type: "property", color: "#32CD32", price: 180 },
+      { name: "🍃", type: "card", color: "#ffd700", price: 0, icon: "🍃" },
+      { name: "Ivysaur", type: "property", color: "#32CD32", price: 200 },
+      { name: "POKÉSHOP", type: "parking", color: "#4facfe", price: 0, icon: "🏪" },
+      { name: "Venusaur", type: "property", color: "#32CD32", price: 220 },
+      { name: "💫", type: "card", color: "#ffd700", price: 0, icon: "💫" },
+      { name: "Eevee", type: "property", color: "#CD853F", price: 220 },
+      { name: "Vaporeon", type: "property", color: "#1E90FF", price: 240 },
+      { name: "🏟️", type: "station", color: "#32CD32", price: 200 },
+      { name: "Jolteon", type: "property", color: "#FFD700", price: 260 },
+      { name: "🔮", type: "card", color: "#ffd700", price: 0, icon: "🔮" },
+      { name: "Flareon", type: "property", color: "#FF6347", price: 280 },
+      { name: "LOJA", type: "tax", color: "#ff6b6b", price: 0, icon: "💸" },
+      { name: "Mewtwo", type: "property", color: "#9370DB", price: 350 },
+      { name: "P/ ROCKET", type: "goto-jail", color: "#ff6b6b", price: 0, icon: "🚁" },
+      { name: "Mew", type: "property", color: "#FF69B4", price: 400 },
+      { name: "Arceus", type: "property", color: "#FFD700", price: 500 }
+    ];
+
+    // MISSION CARDS
+    const missionCards = [
+      { question: "Qual é o tipo do Pikachu?", options: ["Elétrico", "Fogo", "Água", "Grama"], correct: 0, stars: 3 },
+      { question: "Quantas evoluções o Eevee tem?", options: ["5", "8", "3", "10"], correct: 1, stars: 5 },
+      { question: "Qual é o primeiro Pokémon da Pokédex?", options: ["Pikachu", "Charmander", "Bulbasaur", "Mew"], correct: 2, stars: 3 }
+    ];
+
+    // DATA SDK
+    const dataHandler = {
+      onDataChanged(data) {
+        allPlayers = data;
+        updatePlayersList();
+        if (adminUnlocked) {
+          updateAdminPanel();
+        }
+        
+        if (currentUser) {
+          const updatedUser = data.find(p => p.__backendId === currentUser.__backendId);
+          if (updatedUser) {
+            currentUser = updatedUser;
+            updateUserInfo();
+            updateBoard();
+          }
+        }
+      }
+    };
+
+    // ELEMENT SDK
+    async function onConfigChange(config) {
+      document.getElementById('game-title').textContent = config.game_title || defaultConfig.game_title;
+    }
+
+    // INIT
+    async function init() {
+      const dataResult = await window.dataSdk.init(dataHandler);
+      if (!dataResult.isOk) {
+        showMessage('Erro ao conectar!', 'error');
+        return;
+      }
+
+      await window.elementSdk.init({
+        defaultConfig: defaultConfig,
+        onConfigChange: onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [],
+          borderables: [],
+          fontEditable: undefined,
+          fontSizeable: undefined
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["game_title", config.game_title || defaultConfig.game_title],
+          ["admin_password", config.admin_password || defaultConfig.admin_password]
+        ])
+      });
+
+      generateBoard();
+      
+      // Try auto-login from localStorage
+      setTimeout(() => {
+        tryAutoLogin();
+      }, 500);
+    }
+
+    // AUTO LOGIN FROM LOCALSTORAGE
+    function tryAutoLogin() {
+      const savedUserId = localStorage.getItem(STORAGE_KEY_USER);
+      
+      if (savedUserId && allPlayers.length > 0) {
+        const player = allPlayers.find(p => p.__backendId === savedUserId);
+        
+        if (player) {
+          currentUser = player;
+          
+          const today = new Date().toISOString().split('T')[0];
+          if (player.last_play_date !== today) {
+            player.plays_today = 0;
+            player.last_play_date = today;
+            window.dataSdk.update(player);
+          }
+          
+          showGameScreen();
+          showMessage(`Bem-vindo de volta, ${player.player_name}!`, 'success');
+        } else {
+          localStorage.removeItem(STORAGE_KEY_USER);
+        }
+      }
+    }
+
+    // SHOW ADMIN PASSWORD MODAL
+    function showAdminPasswordModal() {
+      const modal = document.createElement('div');
+      modal.className = 'admin-password-modal';
+      modal.id = 'admin-password-modal';
+      
+      modal.innerHTML = `
+        <div class="admin-password-box">
+          <h2>👁️ ACESSO ADMINISTRATIVO</h2>
+          <div class="form-group">
+            <label for="admin-password-input">Senha do Administrador:</label>
+            <input type="password" id="admin-password-input" placeholder="Digite a senha">
+          </div>
+          <button class="btn btn-primary" onclick="verifyAdminPassword()">
+            ✅ DESBLOQUEAR
+          </button>
+          <button class="btn btn-secondary" onclick="closeAdminPasswordModal()">
+            ❌ CANCELAR
+          </button>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+      
+      setTimeout(() => {
+        document.getElementById('admin-password-input').focus();
+      }, 100);
+      
+      document.getElementById('admin-password-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          verifyAdminPassword();
+        }
+      });
+    }
+
+    function closeAdminPasswordModal() {
+      const modal = document.getElementById('admin-password-modal');
+      if (modal) modal.remove();
+    }
+
+    function verifyAdminPassword() {
+      if (!currentUser) {
+        showMessage('Faça login primeiro!', 'error');
+        closeAdminPasswordModal();
+        return;
+      }
+      
+      // Verificar se é o primeiro treinador
+      const sortedPlayers = [...allPlayers].sort((a, b) => 
+        new Date(a.created_at) - new Date(b.created_at)
+      );
+      
+      const firstPlayer = sortedPlayers[0];
+      
+      if (currentUser.__backendId !== firstPlayer.__backendId) {
+        showMessage('Apenas o primeiro treinador pode acessar!', 'error');
+        closeAdminPasswordModal();
+        return;
+      }
+      
+      const config = window.elementSdk ? window.elementSdk.config : defaultConfig;
+      const correctPassword = config.admin_password || defaultConfig.admin_password;
+      const inputPassword = document.getElementById('admin-password-input').value;
+      
+      if (inputPassword === correctPassword) {
+        adminUnlocked = true;
+        isAdmin = true;
+        document.getElementById('admin-panel').classList.remove('hidden');
+        updateAdminPanel();
+        closeAdminPasswordModal();
+        showMessage('Painel Admin Desbloqueado! 👁️', 'success');
+        updateUserInfo();
+      } else {
+        showMessage('Senha incorreta!', 'error');
+      }
+    }
+
+    function lockAdminPanel() {
+      adminUnlocked = false;
+      isAdmin = false;
+      document.getElementById('admin-panel').classList.add('hidden');
+      updatePlayersList();
+      updateUserInfo();
+      showMessage('Painel bloqueado! 🔒', 'info');
+    }
+
+    // GENERATE BOARD
+    function generateBoard() {
+      const board = document.getElementById('board');
+      board.innerHTML = '';
+      
+      const level = currentUser ? (currentUser.board_level || 1) : 1;
+      
+      boardSpaces.forEach((space, index) => {
+        const spaceEl = document.createElement('div');
+        spaceEl.className = 'space';
+        
+        if (level >= 2) spaceEl.classList.add('level-2');
+        if (level >= 3) spaceEl.classList.add('level-3');
+        if (level >= 4) spaceEl.classList.add('level-4');
+        
+        if (space.type === 'card') {
+          spaceEl.classList.add('card-space');
+          spaceEl.innerHTML = `<div>${space.icon}</div>`;
+        } else if (space.type === 'start' || space.type === 'jail' || space.type === 'parking' || space.type === 'goto-jail' || space.type === 'tax') {
+          spaceEl.classList.add('special-space');
+          spaceEl.innerHTML = `
+            <div style="font-size: 16px;">${space.icon || ''}</div>
+            <div class="space-name" style="font-size: 6px; margin-top: 2px;">${space.name}</div>
+          `;
+        } else if (space.type === 'property') {
+          spaceEl.classList.add('property');
+          spaceEl.style.borderTopColor = space.color;
+          const multipliedPrice = space.price * level;
+          spaceEl.innerHTML = `
+            <div class="space-name">${space.name}</div>
+            <div class="space-price">₽${multipliedPrice}</div>
+          `;
+        } else if (space.type === 'station') {
+          spaceEl.style.background = `linear-gradient(135deg, ${space.color} 0%, rgba(0,0,0,0.3) 100%)`;
+          spaceEl.style.borderColor = '#FFD700';
+          spaceEl.style.color = '#FFF';
+          const multipliedPrice = space.price * level;
+          spaceEl.innerHTML = `
+            <div class="space-name" style="color: #FFD700;">🏟️</div>
+            <div class="space-price" style="color: #FFF;">₽${multipliedPrice}</div>
+          `;
+        }
+        
+        spaceEl.onclick = () => buyProperty(index);
+        board.appendChild(spaceEl);
+      });
+    }
+
+    // UPDATE BOARD INFO
+    function updateBoardInfo() {
+      const level = currentUser ? (currentUser.board_level || 1) : 1;
+      const info = document.getElementById('board-info');
+      
+      const levelNames = {
+        1: "🏆 NÍVEL 1 - TABULEIRO BÁSICO 🏆",
+        2: "✨ NÍVEL 2 - TABULEIRO DOURADO ✨",
+        3: "💎 NÍVEL 3 - TABULEIRO LENDÁRIO 💎",
+        4: "🔥 NÍVEL 4 - TABULEIRO MÍTICO 🔥"
+      };
+      
+      info.textContent = levelNames[level] || levelNames[1];
+    }
+
+    // SHOW MESSAGE
+    function showMessage(text, type = 'info') {
+      const existing = document.querySelector('.message');
+      if (existing) existing.remove();
+      
+      const msg = document.createElement('div');
+      msg.className = `message ${type}`;
+      msg.textContent = text;
+      document.body.appendChild(msg);
+      
+      setTimeout(() => msg.remove(), 3000);
+    }
+
+    // SHOW/HIDE SCREENS
+    function showRegister() {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('register-screen').classList.remove('hidden');
+    }
+
+    function showLogin() {
+      document.getElementById('register-screen').classList.add('hidden');
+      document.getElementById('login-screen').classList.remove('hidden');
+    }
+
+    // REGISTER
+    async function register() {
+      const name = document.getElementById('register-name').value.trim();
+      const password = document.getElementById('register-password').value;
+      const confirmPassword = document.getElementById('register-password-confirm').value;
+      
+      if (!name || !password) {
+        showMessage('Preencha todos os campos!', 'error');
+        return;
+      }
+      
+      if (password !== confirmPassword) {
+        showMessage('As senhas não coincidem!', 'error');
+        return;
+      }
+      
+      if (allPlayers.length >= 999) {
+        showMessage('Limite de 999 treinadores atingido!', 'error');
+        return;
+      }
+      
+      if (allPlayers.some(p => p.player_name.toLowerCase() === name.toLowerCase())) {
+        showMessage('Este nome já está em uso!', 'error');
+        return;
+      }
+      
+      const btn = document.getElementById('register-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loading"></span>';
+      
+      const newPlayer = {
+        player_name: name,
+        password: password,
+        is_admin: false,
+        stars: 10,
+        plays_today: 0,
+        last_play_date: new Date().toISOString().split('T')[0],
+        position: 0,
+        properties: JSON.stringify([]),
+        money: 1500,
+        laps: 0,
+        board_level: 1,
+        created_at: new Date().toISOString()
+      };
+      
+      const result = await window.dataSdk.create(newPlayer);
+      
+      btn.disabled = false;
+      btn.textContent = '✅ CRIAR CONTA';
+      
+      if (result.isOk) {
+        showMessage('Treinador criado com sucesso!', 'success');
+        showLogin();
+      } else {
+        showMessage('Erro ao criar conta.', 'error');
+      }
+    }
+
+    // LOGIN
+    async function login() {
+      const name = document.getElementById('login-name').value.trim();
+      const password = document.getElementById('login-password').value;
+      
+      if (!name || !password) {
+        showMessage('Preencha todos os campos!', 'error');
+        return;
+      }
+      
+      const player = allPlayers.find(p => 
+        p.player_name.toLowerCase() === name.toLowerCase() && 
+        p.password === password
+      );
+      
+      if (!player) {
+        showMessage('Nome ou senha incorretos!', 'error');
+        return;
+      }
+      
+      currentUser = player;
+      
+      // Save to localStorage
+      localStorage.setItem(STORAGE_KEY_USER, player.__backendId);
+      
+      const today = new Date().toISOString().split('T')[0];
+      if (player.last_play_date !== today) {
+        player.plays_today = 0;
+        player.last_play_date = today;
+        await window.dataSdk.update(player);
+      }
+      
+      showGameScreen();
+      showMessage(`Bem-vindo, ${player.player_name}!`, 'success');
+    }
+
+    // LOGOUT
+    function logout() {
+      currentUser = null;
+      isAdmin = false;
+      adminUnlocked = false;
+      
+      // Clear localStorage
+      localStorage.removeItem(STORAGE_KEY_USER);
+      
+      document.getElementById('game-screen').classList.add('hidden');
+      document.getElementById('login-screen').classList.remove('hidden');
+      document.getElementById('admin-panel').classList.add('hidden');
+      document.getElementById('user-info').classList.add('hidden');
+      showMessage('Até a próxima!', 'info');
+    }
+
+    // SHOW GAME SCREEN
+    function showGameScreen() {
+      document.getElementById('login-screen').classList.add('hidden');
+      document.getElementById('register-screen').classList.add('hidden');
+      document.getElementById('game-screen').classList.remove('hidden');
+      document.getElementById('user-info').classList.remove('hidden');
+      generateBoard();
+      updateBoardInfo();
+      updateUserInfo();
+      updateBoard();
+    }
+
+    // UPDATE USER INFO
+    function updateUserInfo() {
+      if (!currentUser) return;
+      
+      document.getElementById('user-stars').textContent = currentUser.stars || 0;
+      document.getElementById('user-plays').textContent = currentUser.plays_today || 0;
+      document.getElementById('user-laps').textContent = currentUser.laps || 0;
+      document.getElementById('user-money').textContent = `₽${currentUser.money || 0}`;
+      document.getElementById('plays-remaining').textContent = `${currentUser.plays_today || 0}/3`;
+      
+      const rollBtn = document.getElementById('roll-btn');
+      if (adminUnlocked) {
+        rollBtn.disabled = false;
+        rollBtn.textContent = '⚡ JOGAR (ADMIN)';
+      } else {
+        rollBtn.disabled = (currentUser.plays_today >= 3) || (currentUser.stars < 3);
+        if (currentUser.plays_today >= 3) {
+          rollBtn.textContent = '�� SEM JOGADAS';
+        } else if (currentUser.stars < 3) {
+          rollBtn.textContent = '⭐ 3 ESTRELAS';
+        } else {
+          rollBtn.textContent = '������ JOGAR';
+        }
+      }
+    }
+
+    // UPDATE PLAYERS LIST
+    function updatePlayersList() {
+      const list = document.getElementById('players-list');
+      list.innerHTML = '';
+      
+      allPlayers.forEach(player => {
+        const item = document.createElement('div');
+        item.className = 'player-item';
+        if (currentUser && player.__backendId === currentUser.__backendId) {
+          item.style.borderLeftColor = '#FF1C1C';
+        }
+        item.innerHTML = `
+          <div class="player-name">
+            <span>${player.player_name}</span>
+            <span style="color: #FFD700;">⭐${player.stars}</span>
+          </div>
+          <div class="player-stats">
+            <span>₽${player.money}</span>
+            <span>🔄 ${player.laps || 0}</span>
+            <span>Lv.${player.board_level || 1}</span>
+          </div>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    // UPDATE ADMIN PANEL
+    function updateAdminPanel() {
+      if (!adminUnlocked) return;
+      
+      const list = document.getElementById('admin-players-list');
+      list.innerHTML = '';
+      
+      allPlayers.forEach(player => {
+        const item = document.createElement('div');
+        item.className = 'admin-player';
+        item.innerHTML = `
+          <div>
+            <strong>${player.player_name}</strong><br>
+            <small>⭐${player.stars} | ₽${player.money} | Lv.${player.board_level || 1}</small>
+          </div>
+          <div class="admin-actions">
+            <button class="btn-small btn-success" onclick="giveStars('${player.__backendId}')">+10⭐</button>
+            <button class="btn-small btn-danger" onclick="deletePlayer('${player.__backendId}')">🗑️</button>
+          </div>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    // ROLL DICE
+    async function rollDice() {
+      if (!currentUser) return;
+      
+      if (!adminUnlocked && currentUser.plays_today >= 3) {
+        showMessage('Voc�� já usou suas 3 jogadas!', 'error');
+        return;
+      }
+      
+      if (!adminUnlocked && currentUser.stars < 3) {
+        showMessage('Você precisa de 3 estrelas!', 'error');
+        return;
+      }
+      
+      const rollBtn = document.getElementById('roll-btn');
+      rollBtn.disabled = true;
+      
+      if (!adminUnlocked) {
+        currentUser.stars -= 3;
+        currentUser.plays_today += 1;
+        await window.dataSdk.update(currentUser);
+      }
+      
+      const dice1 = Math.floor(Math.random() * 6) + 1;
+      const dice2 = Math.floor(Math.random() * 6) + 1;
+      const total = dice1 + dice2;
+      
+      document.getElementById('dice1').textContent = dice1;
+      document.getElementById('dice2').textContent = dice2;
+      
+      showMessage(`Você tirou ${total}!`, 'info');
+      
+      setTimeout(async () => {
+        const oldPosition = currentUser.position;
+        currentUser.position = (currentUser.position + total) % boardSpaces.length;
+        
+        if (currentUser.position < oldPosition) {
+          currentUser.laps = (currentUser.laps || 0) + 1;
+          currentUser.money += 200;
+          
+          if (currentUser.laps % 3 === 0 && currentUser.laps > 0) {
+            const newLevel = Math.min(4, Math.floor(currentUser.laps / 3) + 1);
+            if (newLevel > (currentUser.board_level || 1)) {
+              currentUser.board_level = newLevel;
+              showMessage(`🎉 TABULEIRO EVOLUIU PARA NÍVEL ${newLevel}! 🎉`, 'success');
+              generateBoard();
+              updateBoardInfo();
+            }
+          }
+          
+          showMessage('Passou pelo início! +₽200', 'success');
+        }
+        
+        if (!adminUnlocked) {
+          await window.dataSdk.update(currentUser);
+        }
+        
+        updateBoard();
+        handleSpaceLanding();
+        
+        // Mostrar pergunta ao final do turno
+        setTimeout(() => {
+          const randomCard = missionCards[Math.floor(Math.random() * missionCards.length)];
+          showMissionModal(randomCard);
+          rollBtn.disabled = false;
+          updateUserInfo();
+        }, 1000);
+      }, 1000);
+    }
+
+    // HANDLE SPACE LANDING
+    function handleSpaceLanding() {
+      const space = boardSpaces[currentUser.position];
+      
+      if (space.type === 'card') {
+        drawCard();
+      } else if (space.type === 'property') {
+        const level = currentUser.board_level || 1;
+        const price = space.price * level;
+        showMessage(`${space.name} - ₽${price}. Clique para capturar!`, 'info');
+      } else if (space.type === 'tax') {
+        currentUser.money -= 100;
+        showMessage('Você gastou ₽100 na loja!', 'error');
+        if (!adminUnlocked) {
+          window.dataSdk.update(currentUser);
+        }
+      } else if (space.type === 'goto-jail') {
+        currentUser.position = 9;
+        showMessage('Capturado pela Team Rocket!', 'error');
+        if (!adminUnlocked) {
+          window.dataSdk.update(currentUser);
+        }
+        updateBoard();
+      }
+    }
+
+    // DRAW CARD
+    function drawCard() {
+      const rarityRoll = Math.random();
+      let selectedCard;
+      
+      if (rarityRoll < 0.6) {
+        selectedCard = pokemonCards.common[Math.floor(Math.random() * pokemonCards.common.length)];
+      } else if (rarityRoll < 0.85) {
+        selectedCard = pokemonCards.uncommon[Math.floor(Math.random() * pokemonCards.uncommon.length)];
+      } else if (rarityRoll < 0.97) {
+        selectedCard = pokemonCards.rare[Math.floor(Math.random() * pokemonCards.rare.length)];
+      } else {
+        selectedCard = pokemonCards.legendary[Math.floor(Math.random() * pokemonCards.legendary.length)];
+      }
+      
+      showPokemonCard(selectedCard);
+    }
+    
+    // SHOW POKEMON CARD
+    async function showPokemonCard(card) {
+      const modal = document.createElement('div');
+      modal.className = 'mission-modal';
+      modal.id = 'pokemon-card-modal';
+      
+      const rarityColors = {
+        2: { bg: 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)', border: '#FF1C1C' },
+        5: { bg: 'linear-gradient(135deg, #1E90FF 0%, #00BFFF 100%)', border: '#FFD700' },
+        10: { bg: 'linear-gradient(135deg, #9370DB 0%, #BA55D3 100%)', border: '#FFD700' },
+        12: { bg: 'linear-gradient(135deg, #9370DB 0%, #BA55D3 100%)', border: '#FFD700' },
+        20: { bg: 'linear-gradient(135deg, #FF1C1C 0%, #FF6B6B 100%)', border: '#FFD700' }
+      };
+      
+      const colors = rarityColors[card.stars] || rarityColors[2];
+      
+      modal.innerHTML = `
+        <div class="mission-card">
+          <div class="card-back" id="card-back">🎴</div>
+          <div class="hidden" id="pokemon-card-content" style="text-align: center;">
+            <div style="background: ${colors.bg}; border: 5px solid ${colors.border}; border-radius: 20px; padding: 40px; box-shadow: 0 0 40px rgba(255,215,0,0.8); animation: cardReveal 0.5s ease;">
+              <div style="font-size: 80px; margin-bottom: 20px; animation: float 2s ease-in-out infinite;">${card.icon}</div>
+              <div style="font-size: 32px; font-weight: 900; color: #FFF; text-shadow: 3px 3px 6px rgba(0,0,0,0.7); margin-bottom: 15px;">${card.name}</div>
+              <div style="font-size: 20px; font-weight: 700; color: #FFD700; background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 10px; display: inline-block; margin-bottom: 20px;">${card.type}</div>
+              <div style="font-size: 28px; font-weight: 900; color: #FFF; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">⭐ +${card.stars} ESTRELAS</div>
+            </div>
+            <button class="continue-btn" onclick="closePokemonCard(${card.stars})" style="margin-top: 25px;">✅ PEGAR CARTA</button>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+      
+      setTimeout(() => {
+        document.getElementById('card-back').classList.add('hidden');
+        document.getElementById('pokemon-card-content').classList.remove('hidden');
+      }, 800);
+    }
+    
+    // CLOSE POKEMON CARD
+    async function closePokemonCard(stars) {
+      currentUser.stars += stars;
+      
+      if (!adminUnlocked) {
+        await window.dataSdk.update(currentUser);
+      }
+      
+      updateUserInfo();
+      showMessage(`Você ganhou ${stars} estrelas! ⭐`, 'success');
+      
+      const modal = document.getElementById('pokemon-card-modal');
+      if (modal) modal.remove();
+      
+      const cardEl = document.getElementById('current-card');
+      cardEl.innerHTML = `
+        <div class="card">
+          <div class="card-title">🎴 CARTA COLETADA!</div>
+          <div class="card-desc">+${stars} estrelas adicionadas</div>
+        </div>
+      `;
+    }
+
+    // SHOW MISSION MODAL
+    let missionTimer = null;
+    let timeRemaining = 5;
+
+    function showMissionModal(card) {
+      const modal = document.createElement('div');
+      modal.className = 'mission-modal';
+      modal.innerHTML = `
+        <div class="mission-card">
+          <div class="card-back" id="card-back">⭐</div>
+          <div class="hidden" id="mission-content">
+            <div class="mission-timer" id="mission-timer">5</div>
+            <div class="mission-question">${card.question}</div>
+            <div class="mission-options" id="mission-options">
+              ${card.options.map((opt, idx) => `
+                <button class="option-btn" onclick="selectAnswer(${idx}, ${card.correct}, ${card.stars})">${opt}</button>
+              `).join('')}
+            </div>
+            <div class="mission-stars">Recompensa: ⭐ ${card.stars} estrelas</div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+
+      setTimeout(() => {
+        document.getElementById('card-back').classList.add('hidden');
+        document.getElementById('mission-content').classList.remove('hidden');
+        startMissionTimer(card.correct, card.stars);
+      }, 1500);
+    }
+
+    function startMissionTimer(correct, stars) {
+      timeRemaining = 5;
+      const timerEl = document.getElementById('mission-timer');
+      const buttons = document.querySelectorAll('.option-btn');
+      
+      missionTimer = setInterval(() => {
+        timeRemaining--;
+        timerEl.textContent = timeRemaining;
+        
+        if (timeRemaining <= 2) {
+          timerEl.classList.add('danger');
+        }
+        
+        if (timeRemaining <= 0) {
+          clearInterval(missionTimer);
+          
+          buttons.forEach((btn, idx) => {
+            btn.disabled = true;
+            if (idx === correct) {
+              btn.classList.add('correct');
+            }
+          });
+          
+          showMessage('Tempo esgotado! ⏰', 'error');
+          
+          const cardEl = document.getElementById('current-card');
+          cardEl.innerHTML = `
+            <div class="card">
+              <div class="card-title">⏰ TEMPO ESGOTADO!</div>
+              <div class="card-desc">Nenhuma estrela</div>
+            </div>
+          `;
+          
+          setTimeout(() => {
+            const modal = document.querySelector('.mission-modal');
+            if (modal) modal.remove();
+          }, 2000);
+        }
+      }, 1000);
+    }
+
+    // SELECT ANSWER
+    async function selectAnswer(selected, correct, stars) {
+      if (missionTimer) {
+        clearInterval(missionTimer);
+      }
+
+      const buttons = document.querySelectorAll('.option-btn');
+      buttons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === correct) {
+          btn.classList.add('correct');
+        } else if (idx === selected && selected !== correct) {
+          btn.classList.add('incorrect');
+        }
+      });
+
+      if (selected === correct) {
+        currentUser.stars += stars;
+        showMessage(`Correto! +${stars} estrelas! ⭐`, 'success');
+        
+        if (!adminUnlocked) {
+          await window.dataSdk.update(currentUser);
+        }
+        updateUserInfo();
+      } else {
+        showMessage('Resposta errada! 😢', 'error');
+      }
+
+      const cardEl = document.getElementById('current-card');
+      cardEl.innerHTML = `
+        <div class="card">
+          <div class="card-title">${selected === correct ? '✅ CORRETO!' : '❌ ERRADO!'}</div>
+          <div class="card-desc">${selected === correct ? `+${stars} estrelas` : 'Nenhuma estrela'}</div>
+        </div>
+      `;
+
+      // Adicionar botão de continuar
+      const missionContent = document.getElementById('mission-content');
+      if (missionContent) {
+        const existingBtn = missionContent.querySelector('.continue-btn');
+        if (!existingBtn) {
+          const continueBtn = document.createElement('button');
+          continueBtn.className = 'continue-btn';
+          continueBtn.textContent = '✅ CONTINUAR';
+          continueBtn.onclick = () => {
+            const modal = document.querySelector('.mission-modal');
+            if (modal) modal.remove();
+          };
+          missionContent.appendChild(continueBtn);
+        }
+      }
+    }
+
+    // UPDATE BOARD
+    function updateBoard() {
+      const spaces = document.querySelectorAll('.space');
+      
+      spaces.forEach(space => {
+        const existingToken = space.querySelector('.player-token');
+        if (existingToken) existingToken.remove();
+      });
+      
+      allPlayers.forEach((player, idx) => {
+        const space = spaces[player.position];
+        if (space) {
+          const token = document.createElement('div');
+          token.className = 'player-token';
+          token.textContent = player.player_name[0].toUpperCase();
+          token.style.background = `hsl(${idx * 360 / allPlayers.length}, 70%, 50%)`;
+          space.appendChild(token);
+        }
+      });
+      
+      if (currentUser && !allPlayers.some(p => p.__backendId === currentUser.__backendId)) {
+        const space = spaces[currentUser.position];
+        if (space) {
+          const token = document.createElement('div');
+          token.className = 'player-token';
+          token.textContent = currentUser.player_name[0].toUpperCase();
+          token.style.background = '#FFD700';
+          token.style.borderColor = '#FF1C1C';
+          space.appendChild(token);
+        }
+      }
+    }
+
+    // BUY PROPERTY
+    async function buyProperty(index) {
+      if (!currentUser || adminUnlocked) return;
+      
+      const space = boardSpaces[index];
+      if (space.type !== 'property' && space.type !== 'station') return;
+      
+      const properties = JSON.parse(currentUser.properties || '[]');
+      if (properties.includes(index)) {
+        showMessage('Você já tem este Pokémon!', 'info');
+        return;
+      }
+      
+      const level = currentUser.board_level || 1;
+      const price = space.price * level;
+      
+      if (currentUser.money < price) {
+        showMessage('Poké D��lares insuficientes!', 'error');
+        return;
+      }
+      
+      currentUser.money -= price;
+      properties.push(index);
+      currentUser.properties = JSON.stringify(properties);
+      
+      await window.dataSdk.update(currentUser);
+      
+      showMessage(`Você capturou ${space.name}! 🎉`, 'success');
+      updateUserInfo();
+    }
+
+    // ADMIN FUNCTIONS
+    async function giveStars(playerId) {
+      const player = allPlayers.find(p => p.__backendId === playerId);
+      if (!player) return;
+      
+      player.stars += 10;
+      await window.dataSdk.update(player);
+      showMessage(`${player.player_name} recebeu 10 estrelas!`, 'success');
+    }
+
+    async function giveStarsAll() {
+      for (const player of allPlayers) {
+        player.stars += 10;
+        await window.dataSdk.update(player);
+      }
+      showMessage('Todos receberam 10 estrelas!', 'success');
+    }
+
+    async function resetAllPlays() {
+      const today = new Date().toISOString().split('T')[0];
+      for (const player of allPlayers) {
+        player.plays_today = 0;
+        player.last_play_date = today;
+        await window.dataSdk.update(player);
+      }
+      showMessage('Jogadas resetadas!', 'success');
+    }
+
+    async function deletePlayer(playerId) {
+      const player = allPlayers.find(p => p.__backendId === playerId);
+      if (!player) return;
+      
+      await window.dataSdk.delete(player);
+      showMessage(`${player.player_name} removido!`, 'success');
+    }
+
+    // SHOP FUNCTIONS
+    function openShop() {
+      if (!currentUser && !shopLoginMode) {
+        showMessage('Faça login primeiro!', 'error');
+        return;
+      }
+      
+      const modal = document.createElement('div');
+      modal.className = 'shop-modal';
+      modal.id = 'shop-modal';
+      
+      modal.innerHTML = `
+        <div class="shop-container">
+          <div class="shop-header">
+            <div class="shop-title">🛒 LOJA DE PACOTES POKÉMON 🛒</div>
+            <div class="shop-balance">💰 Saldo: ₽<span id="shop-money">${currentUser.money || 0}</span></div>
+          </div>
+          <div class="shop-packs">
+            ${shopPacks.map(pack => `
+              <div class="pack-card">
+                <div class="pack-icon">${pack.icon}</div>
+                <div class="pack-name">${pack.name}</div>
+                <div class="pack-price">₽${pack.price}</div>
+                <div class="pack-desc">${pack.desc}</div>
+                <button class="pack-btn" onclick="buyPack(${pack.id})" ${currentUser.money < pack.price ? 'disabled' : ''}>
+                  ${currentUser.money < pack.price ? '❌ SEM DINHEIRO' : '✅ COMPRAR'}
+                </button>
+              </div>
+            `).join('')}
+          </div>
+          <button class="close-shop-btn" onclick="closeShop()">❌ FECHAR LOJA</button>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+    }
+
+    function closeShop() {
+      const modal = document.getElementById('shop-modal');
+      if (modal) modal.remove();
+      
+      if (shopLoginMode && !adminUnlocked) {
+        shopLoginMode = false;
+        currentUser = null;
+      }
+    }
+
+    async function buyPack(packId) {
+      const pack = shopPacks.find(p => p.id === packId);
+      if (!pack) return;
+      
+      if (currentUser.money < pack.price) {
+        showMessage('Dinheiro insuficiente!', 'error');
+        return;
+      }
+      
+      currentUser.money -= pack.price;
+      
+      if (!adminUnlocked && !shopLoginMode) {
+        await window.dataSdk.update(currentUser);
+      } else if (shopLoginMode && !adminUnlocked) {
+        const player = allPlayers.find(p => p.__backendId === currentUser.__backendId);
+        if (player) {
+          player.money = currentUser.money;
+          await window.dataSdk.update(player);
+        }
+      }
+      
+      const cards = generateCards(pack);
+      
+      document.getElementById('shop-money').textContent = currentUser.money;
+      
+      closeShop();
+      showPackOpening(pack, cards);
+    }
+
+    function generateCards(pack) {
+      const cards = [];
+      
+      if (pack.rarity === 'common') {
+        for (let i = 0; i < 3; i++) {
+          const card = pokemonCards.common[Math.floor(Math.random() * pokemonCards.common.length)];
+          cards.push({ ...card, rarity: 'common' });
+        }
+      } else if (pack.rarity === 'uncommon') {
+        for (let i = 0; i < 4; i++) {
+          const card = pokemonCards.common[Math.floor(Math.random() * pokemonCards.common.length)];
+          cards.push({ ...card, rarity: 'common' });
+        }
+        const isRare = Math.random() < 0.2;
+        const rareCard = isRare 
+          ? pokemonCards.rare[Math.floor(Math.random() * pokemonCards.rare.length)]
+          : pokemonCards.uncommon[Math.floor(Math.random() * pokemonCards.uncommon.length)];
+        cards.push({ ...rareCard, rarity: isRare ? 'rare' : 'uncommon' });
+      } else if (pack.rarity === 'rare') {
+        for (let i = 0; i < 3; i++) {
+          const card = pokemonCards.uncommon[Math.floor(Math.random() * pokemonCards.uncommon.length)];
+          cards.push({ ...card, rarity: 'uncommon' });
+        }
+        const card = pokemonCards.rare[Math.floor(Math.random() * pokemonCards.rare.length)];
+        cards.push({ ...card, rarity: 'rare' });
+        
+        const isLegendary = Math.random() < 0.1;
+        const finalCard = isLegendary
+          ? pokemonCards.legendary[Math.floor(Math.random() * pokemonCards.legendary.length)]
+          : pokemonCards.rare[Math.floor(Math.random() * pokemonCards.rare.length)];
+        cards.push({ ...finalCard, rarity: isLegendary ? 'legendary' : 'rare' });
+      } else if (pack.rarity === 'legendary') {
+        for (let i = 0; i < 5; i++) {
+          const card = pokemonCards.legendary[Math.floor(Math.random() * pokemonCards.legendary.length)];
+          cards.push({ ...card, rarity: 'legendary' });
+        }
+      } else if (pack.rarity === 'mega') {
+        for (let i = 0; i < 5; i++) {
+          const card = pokemonCards.uncommon[Math.floor(Math.random() * pokemonCards.uncommon.length)];
+          cards.push({ ...card, rarity: 'uncommon' });
+        }
+        for (let i = 0; i < 3; i++) {
+          const card = pokemonCards.rare[Math.floor(Math.random() * pokemonCards.rare.length)];
+          cards.push({ ...card, rarity: 'rare' });
+        }
+        for (let i = 0; i < 2; i++) {
+          const card = pokemonCards.legendary[Math.floor(Math.random() * pokemonCards.legendary.length)];
+          cards.push({ ...card, rarity: 'legendary' });
+        }
+      }
+      
+      return cards;
+    }
+
+    async function showPackOpening(pack, cards) {
+      const modal = document.createElement('div');
+      modal.className = 'pack-opening';
+      modal.id = 'pack-opening';
+      
+      modal.innerHTML = `
+        <div class="pack-animation">${pack.icon}</div>
+        <div class="cards-reveal">
+          ${cards.map(card => `
+            <div class="revealed-card ${card.rarity === 'rare' || card.rarity === 'legendary' ? 'rare' : ''}">
+              <div class="revealed-card-icon">${card.icon}</div>
+              <div class="revealed-card-name">${card.name}</div>
+              <div class="revealed-card-type">${card.type}</div>
+              <div class="revealed-card-stars">⭐ +${card.stars}</div>
+            </div>
+          `).join('')}
+        </div>
+        <button class="continue-btn" onclick="closePackOpening()">✅ CONTINUAR</button>
+      `;
+      
+      document.body.appendChild(modal);
+      
+      const totalStars = cards.reduce((sum, card) => sum + card.stars, 0);
+      currentUser.stars += totalStars;
+      
+      if (!adminUnlocked && !shopLoginMode) {
+        await window.dataSdk.update(currentUser);
+        updateUserInfo();
+      } else if (shopLoginMode && !adminUnlocked) {
+        const player = allPlayers.find(p => p.__backendId === currentUser.__backendId);
+        if (player) {
+          player.stars = currentUser.stars;
+          await window.dataSdk.update(player);
+        }
+      }
+      
+      showMessage(`Você ganhou ${totalStars} estrelas!`, 'success');
+    }
+
+    function closePackOpening() {
+      const modal = document.getElementById('pack-opening');
+      if (modal) modal.remove();
+      
+      if (shopLoginMode && !adminUnlocked) {
+        showMessage('Volte para fazer login!', 'info');
+      }
+    }
+
+    init();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9a843a4a9285e2a2',t:'MTc2NDc3NzExMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
